@@ -13,11 +13,17 @@ exports.createAccount = async function (req, res, next) {
     let foundUser = await db.User.findById(req.params.id);
     foundUser.accounts.push(account.id);
     await foundUser.save();
+    let token = jwt.sign(
+      {
+        name: req.body.name,
+      },
+      process.env.SECRET_KEY
+    );
     let foundAccount = await db.Account.findById(account._id).populate("user", {
       username: true,
       email: true,
     });
-    return res.status(200).json(foundAccount);
+    return res.status(200).json({ foundAccount, token });
   } catch (err) {
     return next(err);
   }

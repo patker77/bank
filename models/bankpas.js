@@ -7,6 +7,7 @@ const bankpasSchema = new mongoose.Schema({
   iban: {
     type: String,
     required: true,
+    unique: true,
     trim: true,
   },
   pincode: {

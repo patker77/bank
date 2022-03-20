@@ -18,7 +18,12 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.use("/api/auth", authRoutes);
-app.use("/api/users/:id/accounts", accountRoutes);
+app.use(
+  "/api/users/:id/accounts",
+  loginRequired,
+  ensureCorrectUser,
+  accountRoutes
+);
 app.use(
   "/api/users/:id/account/:id/bankpass",
   loginRequired,

@@ -6,7 +6,7 @@ exports.createBankpas = async function (req, res, next) {
     let bankpas = await db.Bankpas.create({
       iban: req.body.iban,
       pincode: req.body.pincode,
-      account: req.params.id,
+      account: req.params.account,
     });
     let { id, iban, account } = bankpas;
     let token = jwt.sign(
@@ -17,7 +17,7 @@ exports.createBankpas = async function (req, res, next) {
       },
       process.env.SECRET_KEY
     );
-    let foundAccount = await db.Account.findById(req.params.id);
+    let foundAccount = await db.Account.findById(req.params.account);
     foundAccount.bankpas.push(bankpas.id);
     await foundAccount.save();
     let foundBankpas = await db.Bankpas.findById(bankpas._id).populate(
